@@ -24,8 +24,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.0.105
-  - 192.168.0.110
+  - 192.168.0.105-192.168.0.110
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -38,7 +37,7 @@ spec:
 EOF
 
 # Deploy the NGINX Ingress Controller
-kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${NGINX_CONTROLLER_VERSION}/static/provider/cloud/deploy.yaml"
+kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${NGINX_CONTROLLER_VERSION}/deploy/static/provider/cloud/deploy.yaml"
 
 # Verify LoadBalancer Allocation
 kubectl get service -n ingress-nginx ingress-nginx-controller

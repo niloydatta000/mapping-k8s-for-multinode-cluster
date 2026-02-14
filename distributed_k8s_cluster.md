@@ -10,7 +10,7 @@ We will use `Ubuntu 24.04 LTS` servers for all nodes.
 
 ## Requirements
 
-Minimum hardware requirements should have been met for creating a operational cluster.
+Minimum hardware requirements should have been met for creating an operational cluster.
 
 **Hardware Configurations:**
 
@@ -152,6 +152,10 @@ sudo apt update
 sudo apt install -y curl gpg gnupg software-properties-common apt-transport-https ca-certificates
 
 # Installing Containerd Runtime
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
 echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${VERSION_CODENAME}") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt update
 sudo apt install containerd.io
@@ -171,7 +175,8 @@ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/con
 # Restart containerd to apply changes
 sudo systemctl restart containerd
 
-curl -LO "https://github.com/kubernetes-sigs/cri-tools/releases/download/${KUBERNETES_VERSION}/crictl-${KUBERNETES_VERSION}-linux-${ARCH}.tar.gz"
+# Install kubes
+curl -fLO "https://github.com/kubernetes-sigs/cri-tools/releases/download/${KUBERNETES_VERSION}/crictl-${KUBERNETES_VERSION}-linux-${ARCH}.tar.gz"
 sudo tar zxvf "crictl-${KUBERNETES_VERSION}-linux-${ARCH}.tar.gz" -C /usr/local/bin
 rm -f "crictl-${KUBERNETES_VERSION}-linux-${ARCH}.tar.gz"
 curl -fsSL "https://pkgs.k8s.io/core:/stable:/${PACKAGE_VERSION}/deb/Release.key" | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
@@ -196,7 +201,8 @@ sudo vim /etc/default/kubelet
 `KUBELET_EXTRA_ARGS=` will be shown. Append in the same line their local IP addresses for each nodes using the flag `--node-ip=`
 
 On Master Node
-```KUBELET_EXTRA_ARGS=--node-ip=192.168.0.100
+```
+KUBELET_EXTRA_ARGS=--node-ip=192.168.0.100
 ```
 On Worker Node
 ```
@@ -253,7 +259,7 @@ kubectl get pods -A
 
 Cluster-Info
 
-![KUBEADM INFO](./images/kubeadm_cluster-info.jpg)
+![KUBEADM INFO](./images/kubectl_cluster-info.jpg)
 
 Nodes & Pods
 

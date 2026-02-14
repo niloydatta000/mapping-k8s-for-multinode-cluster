@@ -33,8 +33,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.0.105
-  - 192.168.0.110
+  - 192.168.0.105-192.168.0.110
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -53,7 +52,7 @@ The Ingress Controller acts as the "Front Door." While [MetalLB](https://github.
 
 ```bash
 export NGINX_CONTROLLER_VERSION="controller-v1.9.4"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${NGINX_CONTROLLER_VERSION}/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${NGINX_CONTROLLER_VERSION}/deploy/static/provider/cloud/deploy.yaml
 ```
 
 ## Verify LoadBalancer Allocation

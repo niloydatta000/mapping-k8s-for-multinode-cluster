@@ -17,6 +17,8 @@ Designed for real cluster internals and running Kubernetes on bare-metal or loca
 ```
 .
 ├── install_containerd-kubes.sh
+├── flux-bootstrap.md
+├── flux-bootstrap.sh
 ├── MetalLB_Nginx.sh
 ├── distributed_k8s_cluster.md
 └── vLoadBalancer_vIngress.md
@@ -24,7 +26,8 @@ Designed for real cluster internals and running Kubernetes on bare-metal or loca
 
 ## Overview
 
-This project provides a fully manual Kubernetes deployment workflow on Ubuntu nodes to ensure deep architectural understanding instead of relying on automation tools.
+This project provides a manual Kubernetes deployment workflow on Ubuntu nodes to ensure deep architectural understanding instead of relying on automation tools.
+And installing Prometheus, Grafana monitor ELK Stack to the Kubernetes Cluster with shell script and `Git CI/CD` Pipeline through [FluxCD](https://fluxcd.io/)
 `distributed_k8s_cluster.md`
 
 **The environment:**
@@ -102,8 +105,27 @@ Implements:
 
 - External IP exposure for services
 
-
 This enables cloud-like LoadBalancer behavior on local infrastructure without external hardware.
+
+
+4. **Prometheus, Grafana and ELK Stack**
+
+- Prometheus is the "Data Collector." It scrapes metrics (CPU, RAM, Error rates) from the ELK stack and the cluster.
+
+- Grafana is the "Artist." It connects to Prometheus to turn raw numbers into beautiful, readable graphs and alerts.
+
+- ELK Stack is your "target." It stands for Elasticsearch (database), Logstash (processor), and Kibana (dashboard). Its job is to collect logs from your cluster.
+
+Scripts & documentation
+
+```
+flux-bootstrap.sh
+flux-bootstrap.md
+```
+
+FluxCD is a GitOps tool. We tell Flux: "Watch this GitHub repository." Whenever you push a YAML file to that GitHub repo, Flux automatically "pulls" it and applies it to your cluster.
+If our Master node dies and you rebuild it, Flux will automatically restore all your apps the moment it connects to GitHub.
+
 
 
 ## System Requirements
@@ -119,6 +141,12 @@ This enables cloud-like LoadBalancer behavior on local infrastructure without ex
 - **Network:** Stable connectivity between nodes
 
 - Cluster communication must not be blocked by firewall rules.
+
+### For FluxCD automation deployment:
+
+- Create a blank private GitHub repository (e.g., `my-k8s-gitops`).
+
+- Export your **PAT** and GitHub *"Username** as environment variables in a `.env` file
 
 
 ## Quick Start Flow
@@ -164,8 +192,12 @@ This assigns a virtual external IP to the ingress controllers.
 
 - **Ingress routing:** NGINX controller
 
+- **Manifest Installing:** FluxCD
+
 
 Provides a complete bare-metal Kubernetes stack suitable for labs, home clusters, and on-prem learning.
+
+
 
 
 ## Security & Production Notes
@@ -178,3 +210,4 @@ Provides a complete bare-metal Kubernetes stack suitable for labs, home clusters
 ## License
 
 Free to use, modify, and distribute.
+

@@ -1,0 +1,19 @@
+# Ignore the environment file containing the GitHub PAT
+*.env
+
+# --- FluxCD & Kubernetes ---
+# Ignore any local kubeconfig files if you move them here
+kubeconfig
+*.kubeconfig
+
+# --- OS & IDE Files ---
+# Ignore Mac/Linux system files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# --- Logs ---
+# Ignore local debug logs
+*.log
+
